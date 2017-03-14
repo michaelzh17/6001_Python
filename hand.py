@@ -82,8 +82,25 @@ class Hand(object):
         word: string
         returns: Boolean (if the word was or was not made)
         """
-        # Your code here
-        raise NotImplementedError()
+        _flag = True
+        word_dict = {}
+        hand_mute = self.hand.copy()
+        for element in word:
+            word_dict[element] = word_dict.get(element, 0) + 1
+            
+        for key in word_dict:
+            if key not in hand_mute:
+                _flag = False
+            elif word_dict[key] > hand_mute[key]:
+                _flag = False
+            else:
+                hand_mute[key] -= word_dict[key]
+        
+        if _flag == True:
+            self.hand = hand_mute
+        return _flag
+                
+#        raise NotImplementedError()
 
     
 myHand = Hand(7)
