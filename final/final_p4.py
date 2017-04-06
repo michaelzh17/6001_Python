@@ -85,7 +85,31 @@ def longest_run(L):
             else:
                 return sum(L)
 
-                
+
+def longest_run(L):     
+
+    longest= []
+    increasing = [L[0]]
+    decreasing=[L[0]]
+    for i in range(len(L)-1):
+        if L[i] < L[i+1]:
+            decreasing=[L[i+1]]
+            increasing.append(L[i+1] )           
+
+        elif L[i] > L[i+1]:
+            increasing = [L[i+1]]
+            decreasing.append(L[i+1])          
+
+        else :
+            decreasing.append(L[i+1])
+            increasing.append(L[i+1] )
+
+
+        if len(increasing)>len(longest):
+            longest=increasing
+        if len(decreasing)>len(longest):
+            longest=decreasing              
+    return sum(longest)
                 
                 
                 
