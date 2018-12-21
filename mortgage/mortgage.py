@@ -6,7 +6,7 @@ def findPayment(loan, r, m):
         loan at a monthly rate of r for m months"""
     return loan*((r*(1+r)**m)/((1+r)**m -1))
 
-class Morgage(object):
+class Mortgage(object):
     """Abstract class for building different kinds of mortgages"""
     def __init__(self, loan, annRate, months):
         """Assumes: loan and annRate are floats, months an int
@@ -38,7 +38,7 @@ class Fixed(Mortgage):
         self.legend = 'Fixed, ' + str(round(r*100, 2)) + '%'
     
 class FixedWithPts(Mortgage):
-    def __init__(self, loan, r, months):
+    def __init__(self, loan, r, months, pts):
         Mortgage.__init__(self, loan, r, months)
         self.pts = pts
         self.paid = [loan*(pts/100)]
@@ -60,6 +60,21 @@ class TwoRate(Mortgage):
             self.rate = self.nextRate
             self.payment = findPayment(self.outstanding[-1], self.rate, self.months - self.teaserMonths)
         Mortgage.makePayment(self)
+
+def compareMortgages(amt, years, fixedRate, pts, ptsRate, varRate1, varRate2, varMonths):
+    totMonths = years*12
+    fixed1 = Fixed(amt, fixedRate, totMonths)
+    fixed2 = FixedWithPts(amt, ptsRate, totMonths, pts)
+    twoRate = TwoRate(amt, varRate2, totMonths, varRate1, varMonths)
+    morts = [fixed1, fixed2, twoRate]
+    for m in range(totMonths):
+        for mort in morts:
+            mort.makePayment()
+    for m in morts:
+        print(m)
+        print(' Total payments = $' + str(int(m.getTotalPaid())))
+
+compareMortgages(amt=200000, years=30, fixedRate=0.07, pts=3.25, ptsRate=0.05, varRate1=0.045, varRate2=0.095, varMonths=48)
 
 
 
